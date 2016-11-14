@@ -1,9 +1,8 @@
-/* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
-var infoWindowContainer = '<div id="iw%id%" class="info-window"><p class="info-header">%text%</p></div>'
-var infoWindowContentHTML = '<hr><p><strong>Weather: </strong>%desc%</p><p><strong>Tempreture: </strong>%temp% K</p>';
-var infoWindowContentNoWeatherHTML = '<hr><p>Can not recieve weather</p>';
+var infoWindowContentHTML = '<div class="info-window"><p class="info-header">%text%</p><hr><p><strong>Weather: </strong>%desc%</p><p><strong>Tempreture: </strong>%temp% K</p></div>';
+var infoWindowContentNoWeatherHTML = '<div class="info-window"><p class="info-header">%text%</p><hr><p>Can not recieve weather</p></div>';
 var weatherApiURL = "http://api.openweathermap.org/data/2.5/weather?lat=%lat%&lon=%lng%&APPID=480ec4fe3d04ac1310846cfe61cc0e9c";
 
+//Array of places
 var places = [{
     title: "Some place1",
     center: {
@@ -36,7 +35,7 @@ var places = [{
     },
 }]
 
-function markersViewModel() {
+function MarkersViewModel() {
     var self = this;
     self.places = ko.observableArray(places);
     self.currentFilter = ko.observable(""); // property to store the filter
@@ -52,26 +51,19 @@ function markersViewModel() {
 
     });
 
+    // MVVM methods
     self.onPlaceClick = function(item) {
         var index = places.indexOf(item);
         self.infoWindows[index].open(map, self.markers[index]);
-        getWeather(item.center, index);
+        getWeather(item, index, self.infoWindows[index]);
         self.markers.forEach(function(marker) {
             marker.setAnimation(null);
         })
         self.markers[index].setAnimation(google.maps.Animation.BOUNCE);
         var timerId = setTimeout(function() {
             self.markers[index].setAnimation(null);
-        }, 3000);
+        }, 5 * 700);
     };
-    self.onInputEvent = function(place, event) {
-        self.currentFilter(event.target.value);
-        self.filterMarkers();
-    }
-    self.clearFilter = function() {
-        self.currentFilter("");
-        self.filterMarkers();
-    }
 
     //  ---- MARKERS ----
     self.markers = [];
@@ -99,19 +91,22 @@ function markersViewModel() {
         places.forEach(function(place) {
             var index = places.indexOf(place);
             var infoWindow = new google.maps.InfoWindow({
-                content: infoWindowContainer.replace("%id%", index)
-                                            .replace("%text%", place.title)
+                content: infoWindowContentHTML.replace("%text%", place.title)
             });
             self.markers[index].addListener('click', function() {
                 infoWindow.open(map, self.markers[index]);
-                getWeather(place.center, index);
+                getWeather(place, index, infoWindow);
+                self.markers[index].setAnimation(google.maps.Animation.BOUNCE);
+                var timerId = setTimeout(function() {
+                    self.markers[index].setAnimation(null);
+                }, 5 * 700);
             });
             self.infoWindows.push(infoWindow);
         });
     };
 }
 
-var markersVM = new markersViewModel();
+var markersVM = new MarkersViewModel();
 
 
 ko.applyBindings(markersVM);
@@ -120,6 +115,8 @@ ko.applyBindings(markersVM);
 //NAWIGATION BAR
 var navOpened = false;
 
+/* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
+/* or hide it*/
 function moveNav() {
     if (navOpened) {
         document.getElementById("mySidenav").style.width = "0";
@@ -132,26 +129,22 @@ function moveNav() {
     }
 }
 
-function getWeather(center, index) {
-    var url = weatherApiURL.replace("%lat%", Math.round(parseInt(center.lat))).replace("%lng%", Math.round(parseInt(center.lng)));
-    var elem = $('#iw' + index);
+// Recieving weather on specified coordinates from Open Weather API
+function getWeather(place, index, infoWindow) {
+    var url = weatherApiURL.replace("%lat%", Math.round(parseInt(place.center.lat))).replace("%lng%", Math.round(parseInt(place.center.lng)));
     var weather = {
-        temp : "no tempreture recieved",
-        desc : "no descriprion recieved"
+        temp: "no tempreture recieved",
+        desc: "no descriprion recieved"
     }
     $.ajax({
         url: url
-    }).done(function(data){
-        console.log("temp = " + data.main.temp);
-        console.log("edsc = " + data.weather[0].discription);
-        console.log(infoWindowContentHTML.replace('%temp%', data.main.temp)
-                                                    .replace('%desc%', data.weather[0].discription));
-        if(elem.children().length < 2)
-            elem.append(infoWindowContentHTML.replace('%temp%', data.main.temp)
-                                                    .replace('%desc%', data.weather[0].discription))
+    }).done(function(data) {
+
+        infoWindow.setContent(infoWindowContentHTML.replace('%text%', place.title)
+            .replace('%temp%', data.main.temp)
+            .replace('%desc%', data.weather[0].description))
     }).fail(function() {
-        if(elem.children().length < 2)
-            elem.append(infoWindowContentNoWeatherHTML);
+        infoWindow.setContent(infoWindowContentNoWeatherHTML.replace('%text%', place.title));
     });
 
 };
