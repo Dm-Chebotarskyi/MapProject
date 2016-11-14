@@ -1,0 +1,89 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-y: hidden; /* Disable vertiacl scroll */
+}
+
+#map {
+    height: 100%;
+}
+
+#main {
+    transition: margin-left .5s;
+    will-change: transform;
+}
+
+.info-header {
+    color: #4675AB;
+}
+
+header {
+    height: 8%;
+    background-color: #222;
+}
+
+li p {
+    font-size: 18px;
+    cursor: pointer;
+}
+
+/* The side navigation menu */
+.sidenav {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Stay on top */
+    top: 0;
+    left: 0;
+    color: white;
+    background-color: #000;
+    overflow-x: hidden; /* Disable horizontal scroll */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+    will-change: transform;
+    text-align: center;
+}
+
+header .fa-bars {
+    color: #4675AB;
+    font-size: 25px;
+    padding: 10px;
+}
+
+ul{
+    text-align: left;
+    list-style-type: none;
+    padding: 20px;
+    font-size: 15px;
+}
+
+input[type=text], select {
+    width: 80%;
+    padding: 7px 12px;
+
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.filter-container {
+    border-radius: 5px;
+    padding: 10px;
+    flex-wrap: wrap;
+    text-align: center;
+    vertical-align: center;
+}
+
+.fa-times {
+    color: #4675AB;
+    font-size: 2em;
+    padding-left: 10px;
+    cursor: pointer;
+}
+
+@media screen and (max-device-width: 400px) {
+    .sidenav p, p {
+        font-size: 150%;
+    }
+}
