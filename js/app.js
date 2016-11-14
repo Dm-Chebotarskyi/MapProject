@@ -144,7 +144,7 @@ function getWeather(place, index, infoWindow) {
             .replace('%temp%', data.main.temp)
             .replace('%desc%', data.weather[0].description))
     }).fail(function() {
-        infoWindow.setContent(infoWindowContentNoWeatherHTML);
+        infoWindow.setContent(infoWindowContentNoWeatherHTML.replace('%text%', place.title));
     });
 
 };
