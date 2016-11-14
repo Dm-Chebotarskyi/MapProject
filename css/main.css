@@ -82,8 +82,28 @@ input[type=text], select {
     cursor: pointer;
 }
 
-@media screen and (max-device-width: 400px) {
+@media screen and (max-device-width: 800px) {
+    .sidenav {
+        background-color: red;
+    }
+
+    header .fa-bars {
+        height: 100%;
+        padding: 20px;
+    }
+    .fa-bars:before {
+        font-size: 2em;
+    }
+
+    .fa-times:before {
+        font-size: 25px;
+    }
+
     .sidenav p, p {
         font-size: 150%;
+    }
+
+    .fa {
+
     }
 }
