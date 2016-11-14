@@ -2,7 +2,11 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    overflow-y: hidden; /* Disable vertiacl scroll */
+}
+
+.container {
+  height: 100%;
+  position: relative;
 }
 
 #map {
@@ -83,16 +87,13 @@ input[type=text], select {
 }
 
 @media screen and (max-device-width: 800px) {
-    .sidenav {
-        background-color: red;
-    }
 
     header .fa-bars {
         height: 100%;
         padding: 20px;
     }
     .fa-bars:before {
-        font-size: 2em;
+        font-size: 25px;
     }
 
     .fa-times:before {
@@ -105,5 +106,18 @@ input[type=text], select {
 
     .fa {
 
+    }
+}
+
+@media screen and (max-device-width: 400px) {
+    header .fa-bars {
+        height: 100%;
+        padding: 5px;
+    }
+    .fa-bars:before {
+        font-size: 15px;
+    }
+    .fa-times:before {
+        font-size: 15px;
     }
 }
