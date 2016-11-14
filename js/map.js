@@ -4,26 +4,16 @@ var map;
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: {
-            lat: 40.75135,
+            lat: 40.74135,
             lng: -73.99802
         },
-        zoom: 13
+        zoom: 12
     });
 
     markersVM.createMarkers();
     markersVM.createInfoWindows();
 }
 
-    // var marker = new google.maps.Marker({
-    //     position: singleLatLng,
-    //     map: map,
-    //     title: "SingleLatLng"
-    // })
-    //
-    // var infoWindow = new google.maps.InfoWindow({
-    //     content: "Some text!"
-    // })
-    //
-    // marker.addListener('click', function() {
-    //     infoWindow.open(map, marker);
-    // })
+function googleError() {
+    alert("Can not load Google Maps :(");
+}
